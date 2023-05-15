@@ -1,36 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-
-import math
 from threading import Thread
-
-eps = 10 ** (-7)
 
 
 def check_sum(x):
-    result = (math.e ** x - math.e ** (-x)) / 2
-    print(f"The check is: {result}")
+    y = (5-2*x) / (6 - 5*x + x**2)
+    print(f"The result check-function is: {y}")
 
 
-def inf_sum(x):
-    summa = 1.0
+def s_sum(x):
     n = 1
-    temp = 0
-    f = 1
-    while abs(summa - temp) > eps:
-        temp = summa
-        if n > 0:
-            f *= (2 * n) * (2 * n + 1)
-        summa += x ** (2 * n + 1) / f
-        n += 1
+    term = (1 / (2 ** n) + 1 / (3 ** n)) * (x ** (n - 1))
+    epsilon = 1e-7
+    ssum = term
 
-    print(f"The sum is: {summa}")
+    while abs(term) >= epsilon:
+        n += 1
+        term = (1 / (2 ** n) + 1 / (3 ** n)) * (x ** (n - 1))
+        ssum += term
+
+    print(f"The sum S is: {ssum}")
+
+
+def main():
+    x = -0.8
+    thread1 = Thread(target=check_sum(x))
+    thread1.start()
+    thread2 = Thread(target=s_sum(x))
+    thread2.start()
 
 
 if __name__ == '__main__':
-    x = 2
-    thread1 = Thread(target=check_sum(x))
-    thread2 = Thread(target=inf_sum(x))
-    thread1.start()
-    thread2.start()
+    main()
